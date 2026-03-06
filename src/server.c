@@ -3,16 +3,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct Server server_constructor(
+Server server_constructor(
     int domain,
     int service,
     int protocol,
     int port,
     int backlog,
     unsigned long interface,
-    void (*run_response_socket)(struct Server *server))
+    void (*run_client_socket)(Server *server))
 {
-    struct Server server;
+    Server server;
 
     server.domain = domain;
     server.service = service;
@@ -47,7 +47,7 @@ struct Server server_constructor(
         exit(1);
     }
 
-    server.run_response_socket = run_response_socket;
+    server.run_client_socket = run_client_socket;
 
     return server;
 }

@@ -8,7 +8,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 
-struct Server
+typedef struct Server
 {
     int domain;
     int service;
@@ -21,17 +21,17 @@ struct Server
 
     int socket;
 
-    void (*run_response_socket)(struct Server *server);
-};
+    void (*run_client_socket)(struct Server *server);
+} Server;
 
-struct Server server_constructor(
+Server server_constructor(
     int domain,
     int service,
     int protocol,
     int port,
     int backlog,
     unsigned long interface,
-    void (*launch)(struct Server *server)
+    void (*run_client_socket)(Server *server)
 );
 
 #endif

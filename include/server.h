@@ -1,37 +1,32 @@
 #ifndef SERVER_H
 #define SERVER_H
 
-#define PORT 8080
-#define BACKLOG 10
-#define BUFFER_SIZE 1024
+#define _POSIX_C_SOURCE 200809L
 
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <pthread.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <unistd.h>
 
-typedef struct Server
-{
-    int domain;
-    int service;
-    int protocol;
+#include "router.h"
+
+#define PORT 8080
+#define BACKLOG 10
+#define BUFFER_SIZE 1024
+#define READ_CHUNK_SIZE 1024
+
+typedef struct {
     int port;
-    int backlog;
-    unsigned long interface;
-
-    struct sockaddr_in address;
-
-    int socket;
-
-    void (*run_client_socket)(struct Server *server);
+    int server_fd;
+    Router *router;
 } Server;
 
-Server server_constructor(
-    int domain,
-    int service,
-    int protocol,
-    int port,
-    int backlog,
-    unsigned long interface,
-    void (*run_client_socket)(Server *server)
-);
+void server_init(Server *server, int port, Router *router);
+void server_run(Server *server);
 
 #endif
